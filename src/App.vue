@@ -10,10 +10,7 @@
         </b-col>
         <b-col>
         <b-input-group>
-          <b-form-input placeholder="Search for ..."></b-form-input>
-          <b-input-group-append>
-            <b-button ariant="outline-secondary">Go!</b-button>
-          </b-input-group-append>
+          <b-form-input v-model="search" placeholder="Search for ..."></b-form-input>
         </b-input-group>
         </b-col>
       </b-row>
@@ -28,9 +25,9 @@
         </b-input-group>
         </b-col>
       </b-container>
-      <b-container class="mt-4" v-show="dataCheckList.length">
+      <b-container class="mt-4" v-show="filteredDataCheckList.length">
         <hr>
-        <b-col cols="12" v-for="item in dataCheckList" :key="item.id">
+        <b-col cols="12" v-for="item in filteredDataCheckList" :key="item.id">
           <list-item
             :item="item"
             @save="updateItem"
@@ -58,7 +55,14 @@ export default {
     editingCheckListCashe: [],
     newItemText: '',
     addNewItemMode: false,
+    search: '',
   }),
+  computed: {
+    filteredDataCheckList() {
+      // eslint-disable-next-line
+      return this.dataCheckList.filter(item => (item.value.toLowerCase().includes(this.search.toLowerCase())));
+    },
+  },
   methods: {
     deleteAllItems() {
       this.dataCheckList = [];
